@@ -1,20 +1,96 @@
-// homework2.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
+//Question 1
+//made with the assistance of chatgpt
 #include <iostream>
+#include <string>
+#include <memory>
+#include <vector>
 
-int main()
-{
-    std::cout << "Hello World!\n";
+// Abstract base class for sensors
+class Sensor {
+public:
+    virtual void gatherData() = 0;
+    virtual void processData() = 0;
+    virtual ~Sensor() {}
+};
+
+// Derived classes for specific sensors
+class TemperatureSensor : public Sensor {
+public:
+    void gatherData() override {
+        std::cout << "Gathering data from Temperature Sensor." << std::endl;
+    }
+
+    void processData() override {
+        std::cout << "Processing data from Temperature Sensor." << std::endl;
+    }
+};
+
+class PressureSensor : public Sensor {
+public:
+    void gatherData() override {
+        std::cout << "Gathering data from Pressure Sensor." << std::endl;
+    }
+
+    void processData() override {
+        std::cout << "Processing data from Pressure Sensor." << std::endl;
+    }
+};
+
+class PositionSensor : public Sensor {
+public:
+    void gatherData() override {
+        std::cout << "Gathering data from Position Sensor." << std::endl;
+    }
+
+    void processData() override {
+        std::cout << "Processing data from Position Sensor." << std::endl;
+    }
+};
+
+// Factory class to create sensors
+class SensorFactory {
+public:
+    static std::unique_ptr<Sensor> createSensor(const std::string& sensorType) {
+        if (sensorType == "Temperature")
+            return std::make_unique<TemperatureSensor>();
+        else if (sensorType == "Pressure")
+            return std::make_unique<PressureSensor>();
+        else if (sensorType == "Position")
+            return std::make_unique<PositionSensor>();
+        else
+            return nullptr;
+    }
+};
+
+// Aerospace control system class
+class AerospaceControlSystem {
+private:
+    std::vector<std::unique_ptr<Sensor>> sensors;
+
+public:
+    void addSensor(std::unique_ptr<Sensor> sensor) {
+        sensors.push_back(std::move(sensor));
+    }
+
+    void monitorAndAdjust() {
+        for (const auto& sensor : sensors) {
+            sensor->gatherData();
+            sensor->processData();
+            std::cout << "Adjusting controls based on sensor data." << std::endl;
+        }
+    }
+};
+
+int main() {
+    AerospaceControlSystem ctrlSys;
+
+    // Adding sensors
+    ctrlSys.addSensor(SensorFactory::createSensor("Temperature"));
+    ctrlSys.addSensor(SensorFactory::createSensor("Pressure"));
+    ctrlSys.addSensor(SensorFactory::createSensor("Position"));
+
+    // Monitoring and adjusting
+    ctrlSys.monitorAndAdjust();
+
+    return 0;
 }
-
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
