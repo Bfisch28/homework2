@@ -1,0 +1,5 @@
+Question 5 (5 points):
+From Question2, what issues may happen if the robot that finished the 
+task is assigned a new task immediately? And what will be a potential 
+solution for the issues?
+
